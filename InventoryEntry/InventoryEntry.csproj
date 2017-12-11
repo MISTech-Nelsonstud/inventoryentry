@@ -43,11 +43,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="databaseConnector2017">
+      <HintPath>..\..\databaseConnector2017\databaseConnector2017\bin\Debug\databaseConnector2017.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="OpenXMLExcel">
+      <HintPath>..\..\OpenXMLExcel\OpenXMLExcel\bin\Debug\OpenXMLExcel.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -75,18 +81,30 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ajaxpost.aspx" />
+    <Content Include="css\inventoryentry.css" />
     <Content Include="Global.asax" />
+    <Content Include="inventoryentry.html" />
+    <Content Include="js\inventoryentry.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ajaxpost.aspx.cs">
+      <DependentUpon>ajaxpost.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ajaxpost.aspx.designer.cs">
+      <DependentUpon>ajaxpost.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="definer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="helper classes\CommonClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
