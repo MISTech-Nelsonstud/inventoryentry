@@ -6,7 +6,7 @@ INVREPORT.displayDivId = "divMain";
 
 
 INVREPORT.initControls = function () {
-    var allLocations = AJAXPOST.callQuery("WMS_GetAllLocations").payload;
+    var allLocations = AJAXPOST.callQuery2("WMS_GetAllLocations").payload;
 
     var keys = Object.keys(allLocations.rows);
     var ddl = [{ "text": "--select an option--", "value": "" }];
@@ -35,7 +35,7 @@ INVREPORT.initGrid = function (company) {
         company
     ]
 
-    INVREPORT.reportData = AJAXPOST.callQuery("WMS_GetPhysInvReport", params).payload;
+    INVREPORT.reportData = AJAXPOST.callQuery2("WMS_GetPhysInvReport", params).payload;
 
     var keys = Object.keys(INVREPORT.reportData.rows);
     keys.forEach(function (item) {
