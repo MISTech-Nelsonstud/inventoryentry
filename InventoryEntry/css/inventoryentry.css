@@ -7,3 +7,133 @@ body {
     font-family: "Segoe UI", Segoe, Arial, Tahoma; 
     margin:0;
 }
+#divTitle{
+    position:fixed;
+    height: 50px;
+    background-color: #222222;
+    color: white;
+    width:100%;
+    font-weight:700;
+    font-size:1.2em;
+    z-index:10;
+}
+#divBottom{
+    position:absolute;
+    top:50px;
+    width:100%;
+    z-index:5;
+}
+.inventoryEntryLeftTitle{
+    float:left;
+    padding-left:2%;
+}
+.inventoryEntryRightTitle{
+    float:right;
+    padding-right:2%
+}
+#divData{
+    font-weight:700;
+    border-bottom:2px solid #222222;
+    margin-bottom:2px;
+}
+.inventoryEntryPage2TxtL{
+    float:left;
+    width:25%;
+    padding:0 4px 0 4px;
+}
+.inventoryEntryPage2DivL{
+    float:right;
+    width:74%;
+}
+.inventoryEntryPage2TxtP{
+    clear:both;
+    width:100%;
+    padding:0 4px 0 4px;
+}
+.inventoryEntryPage2DivP{
+    clear:both;
+    width:100%;
+}
+#divPage2Div button{
+    width:100px;
+    height:38px;
+    float:left;
+}
+.inventoryEntryInfoCell{
+    border:1px solid #CCCCCC;
+    margin:1px;
+    float:left;
+}
+.inventoryEntryInfoCellTitle{
+    background-color: #999999;
+    color:white;
+    padding:0 2px;
+}
+.inventoryEntryCellValue{
+    border:1px solid #999999;
+    padding:0 2px;
+    font-weight:400;
+}
+.inventoryEntryPage3TopL{
+    width:25%;
+    float:left;
+}
+.inventoryEntryPage3ButtonsL{
+    width:74%;
+    float:right;
+}
+.inventoryEntryPage3TopP{
+    width:100%;
+    clear:both;
+}
+.inventoryEntryPage3ButtonsP{
+    width:100%;
+    clear:both;
+}
+#divItemButtons button, #divAddItem input[type=button]{
+    width:210px;
+    height:85px;
+    float:left;
+}
+#divAddItem input[type=button]{
+    font-weight:700;
+    font-size:0.9em;
+}
+#divItemButtons button h3{
+    margin:0;
+    padding:0;
+}
+.inventoryEntryPage4TxtQtyL{
+    width:30%;
+    float:left;
+}
+.inventoryEntryPage4KeyPadL{
+    width:69%;
+    float:right;
+}
+.inventoryEntryPage4TxtQtyP{
+    width:100%;
+    clear:both;
+    padding:0 10px;
+}
+.inventoryEntryPage4KeyPadP{
+    width:100%;
+    clear:both;
+}
+#divKeyPad button{
+    width:120px;
+    height:120px;
+    font-weight:700;
+    font-size:3.1em;
+}
+#divKeyPad button image{
+    width:100px;
+    height:100px;
+}
+#divKeyPad table{
+    border-collapse:collapse;
+}
+#divKeyPad td{
+    padding:0;
+    margin:0;
+}
