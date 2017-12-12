@@ -1,0 +1,78 @@
+﻿body {
+}
+
+#divMain{
+    margin-top:20px
+}
+
+#divInvReportGrid{
+    float: left;
+}
+
+#howToUse{
+    display: none;
+}
+
+#createExcel{
+    display: none;
+}
+
+.divNotCompleteSquare{
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  background-color: #ff9999 !important;
+  /*float:right;*/
+}
+
+.dvTitleSubHeadline{
+    background-color:white;
+    font-weight:bold;
+}
+
+#divCDbutNelson, #divCDbutSwa, #divCDbutFerry, #divCDbutSkn{
+    margin-top: -15px;
+}
+
+.butCompany{
+  color: #fff;
+  background-color: #6496c8;
+  text-shadow: -1px 1px #417cb8;
+  border: none;
+  font-size: 15px;
+  padding: 5px 10px;
+  width:100px;
+}
+
+.butCompany:hover{
+    background-color: #346392;
+    text-shadow: -1px 1px #27496d;
+}
+
+.butCompany:active{
+    background-color: #27496d;
+    text-shadow: -1px 1px #193047;
+}
+
+.butCompany:disabled{
+    background: #dddddd;
+    text-shadow: none;
+}
+
+#butExcel{
+    width:120px; 
+    font-size: 15px;
+    vertical-align: middle; 
+    margin-left: 5px;
+}
+
+#butCsv{
+    width:120px; 
+    font-size: 15px;
+    vertical-align: middle; 
+    margin-left: 5px;
+    display:inline-block;
+}
+
+
