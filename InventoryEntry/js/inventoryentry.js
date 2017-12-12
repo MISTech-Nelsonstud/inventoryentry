@@ -35,7 +35,7 @@ INVE.currentObj = {
 INVE.utility = {
     init: function () {
         "use strict";
-        var res = AJAXPOST.callQuery("WMS_GetAllLocations");
+        var res = AJAXPOST.callQuery2("WMS_GetAllLocations");
         INVE.locations = res.payload.rows;
         INVE.page1.display();
     },
@@ -208,7 +208,7 @@ INVE.page3 = {
         };
         INVE.utility.info(infoObj);
         var params = [selectedLocation, INVE.currentObj.site];
-        var res = AJAXPOST.callQuery("pr_WMS_GetAllItems", params);
+        var res = AJAXPOST.callQuery2("pr_WMS_GetAllItems", params);
         var dispObj = document.getElementById(INVE.displayDivId);
         var topObj = COMMON.getBasicElement("div", "divAddItem", COMMON.getButton(null, "Add Item Not Listed", "INVE.page3.newItem();"));
         topObj.appendChild(COMMON.getButton(null, "Return to \"Select Location\"", "INVE.page2.display();"));
@@ -256,7 +256,7 @@ INVE.page3 = {
     },
     newItemGetLot: function (item) {
         "use strict";
-        var res = AJAXPOST.callQuery("WMS_GetValidItemLx", [item]);
+        var res = AJAXPOST.callQuery2("WMS_GetValidItemLx", [item]);
         if (res.payload.rows[0][0] === "1") {
             INVE.page3.newItem(true);
             return;
@@ -287,7 +287,7 @@ INVE.page4 = {
         INVE.currentObj.item = itemNumber;
         INVE.currentObj.lot = lot;
         var params = [INVE.currentObj.item, INVE.currentObj.site];
-        var res = AJAXPOST.callQuery("WMS_GetItemDetails", params).payload.rows;        
+        var res = AJAXPOST.callQuery2("WMS_GetItemDetails", params).payload.rows;        
         INVE.utility.clearDisplay();
         INVE.utility.title("Enter Quantity");
         INVE.currentObj.itemdescription = res[0][0];
@@ -350,7 +350,7 @@ INVE.page4 = {
             INVE.currentObj.warehouse,
             INVE.currentObj.site
         ];
-        AJAXPOST.callQuery("WMS_UpdatePhysicalInv", params, true);
+        AJAXPOST.callQuery2("WMS_UpdatePhysicalInv", params, true);
         INVE.page2.display("Data Saved");
     },
     displayKeyActions: function (keyNumber) {
