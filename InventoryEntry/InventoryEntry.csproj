@@ -52,7 +52,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="OpenXMLExcel">
-      <HintPath>..\..\OpenXMLExcel\OpenXMLExcel\bin\Debug\OpenXMLExcel.dll</HintPath>
+      <HintPath>G:\elyria\MIS\SourceCode\OpenXMLExcel.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -72,6 +72,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\inventoryreport.css" />
     <Content Include="js\inventoryreport.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
