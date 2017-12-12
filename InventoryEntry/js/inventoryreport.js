@@ -66,7 +66,7 @@ INVREPORT.initGrid = function (company) {
     DISPLAYGRID.addTitles(gridIndex, company + " Report <input id=\"butExcel\" type=\"button\" value=\"Create Excel\" onclick=\"INVREPORT.createExcel('" + company + " Report');\"></input><input id=\"butCsv\" type=\"button\" value=\"Create CSV\" onclick=\"INVREPORT.createCsv('" + company + " Report');\"></input><div>", (isComplete ? "<span style=\"color:green\">All inventory for " + company + " is complete</span>"  : "<span style=\"color:red\">All inventory must be complete for " + company + " before you can create a report</span>"));
 
     //<div class=\"divNotCompleteSquare\"></div><div style=\"margin-top: 6px; font-size: 14px; display:inline-block; vertical-align: top;\">Not Complete</div></div></div>
-
+    DISPLAYGRID.ignoreFilterRow(gridIndex);
     DISPLAYGRID.alternateColors(gridIndex);
     DISPLAYGRID.display(gridIndex, INVREPORT.reportData);
 
