@@ -110,6 +110,12 @@ INVE.utility = {
         envelope.appendChild(COMMON.getBasicElement("div", null, title, "inventoryEntryTextTitle"));
         envelope.appendChild(COMMON.getFieldObject("txt", id, "", required));
         return envelope;
+    },
+    getDDL: function (id, title, required) {
+        var envelope = COMMON.getBasicElement("div");
+        envelope.appendChild(COMMON.getBasicElement("div", null, title, "inventoryEntryTextTitle"));
+        //envelope.appendChild(COMMON.getDDL(id, null, null,);
+        return envelope;
     }
 };
 INVE.page1 = {
@@ -154,8 +160,12 @@ INVE.page2 = {
         keys.forEach(function (oneKey) {
             li.push({ value: oneKey, text: oneKey });
         });
-        txtObj.appendChild(COMMON.getBasicElement("div", null, "Location Description"));
-        txtObj.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();" }));
+        var div = COMMON.getBasicElement("div");
+        div.appendChild(COMMON.getBasicElement("div", null, "Location Description"));
+        div.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();" }));
+        txtObj.appendChild(div);
+        //txtObj.appendChild(COMMON.getBasicElement("div", null, "Location Description"));
+        //txtObj.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();" }));
         var dispObj = document.getElementById(INVE.displayDivId);
         dispObj.appendChild(txtObj);
         dispObj.appendChild(COMMON.getBasicElement("div", "divPage2Div"));

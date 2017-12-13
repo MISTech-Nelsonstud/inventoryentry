@@ -50,14 +50,21 @@ body {
     width:100%;
     padding:0 4px 0 4px;
 }
+
+.inventoryEntryPage2TxtP div{
+    display: inline-block
+}
+
 .inventoryEntryPage2DivP{
     clear:both;
     width:100%;
+    display: block;
+    text-align: center;
 }
 #divPage2Div button{
     width:100px;
     height:38px;
-    float:left;
+    /*float:left;*/
 }
 .inventoryEntryInfoCell{
     border:1px solid #CCCCCC;
