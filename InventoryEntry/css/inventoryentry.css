@@ -36,7 +36,7 @@ body {
     border-bottom:2px solid #222222;
     margin-bottom:2px;
 }
-.inventoryEntryPage2TxtL{
+/*.inventoryEntryPage2TxtL{
     float:left;
     width:25%;
     padding:0 4px 0 4px;
@@ -44,28 +44,125 @@ body {
 .inventoryEntryPage2DivL{
     float:right;
     width:74%;
-}
+}*/
 .inventoryEntryPage2TxtP{
     clear:both;
     width:100%;
     padding:0 4px 0 4px;
+    margin-bottom: 30px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid black;
+    /*text-align: center;*/
 }
 
+
+
+
+
+
+.divLocFilter{
+    position: relative;
+}
+
+#btnSearch{
+    position:absolute;
+    right: 0px;
+    height: 38px;
+    width: 80px;
+    -webkit-appearance: none;
+}
+
+    #txtLoc{
+    font-size: 1.6em;
+    height: 32px;
+    }
+    #ddlLocType, #ddlLocComp{
+    font-size: 1.2em;
+    height: 38px;
+    }
+
+
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) 
+and (orientation: portrait) 
+and (-webkit-min-device-pixel-ratio: 1) {
+    
+    #btnSearch{
+        position:absolute;
+        right: 2px;
+        height: 67px;
+        width: 100px;
+        background-color: lightgray;
+        font-size: 1em;
+        -webkit-appearance: none;
+    }
+
+    #txtLoc{
+    font-size: 1.6em;
+    height: 52px;
+    }
+    #ddlLocType, #ddlLocComp{
+    font-size: 1.6em;
+    height: 67px;
+    }
+
+
+}
+
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) 
+and (orientation: landscape) 
+and (-webkit-min-device-pixel-ratio: 1) {
+    
+    #btnSearch{
+        position:absolute;
+        right: 2px;
+        height: 67px;
+        width: 100px;
+        background-color: lightgray;
+        font-size: 1em;
+        border-radius: 0;
+        -webkit-appearance: none;
+    }
+
+    #txtLoc{
+    font-size: 1.6em;
+    height: 52px;
+    }
+    #ddlLocType, #ddlLocComp{
+    font-size: 1.6em;
+    height: 67px;
+    }
+}
+
+
+
 .inventoryEntryPage2TxtP div{
-    display: inline-block
+    display: inline-block;
+    vertical-align: top;
 }
 
 .inventoryEntryPage2DivP{
     clear:both;
     width:100%;
     display: block;
-    text-align: center;
+    /*text-align: center;*/
 }
-#divPage2Div button{
+
+.inventoryEntryPage2DivP button{
+    width:188px;
+    height:88px;
+    margin: 2px;
+    /*text-align: center;*/
+}
+
+/* #divPage2Div button{
     width:100px;
     height:38px;
-    /*float:left;*/
-}
+    float:left;
+} */
 .inventoryEntryInfoCell{
     border:1px solid #CCCCCC;
     margin:1px;
@@ -81,25 +178,32 @@ body {
     padding:0 2px;
     font-weight:400;
 }
-.inventoryEntryPage3TopL{
+/*.inventoryEntryPage3TopL{
     width:25%;
     float:left;
 }
 .inventoryEntryPage3ButtonsL{
     width:74%;
     float:right;
-}
+}*/
 .inventoryEntryPage3TopP{
     width:100%;
     clear:both;
 }
+
+.inventoryEntryPage3TopP input {
+    background-color: #c6d7ec;
+    width:210px !important;
+}
+
 .inventoryEntryPage3ButtonsP{
     width:100%;
     clear:both;
 }
 #divItemButtons button, #divAddItem input[type=button]{
-    width:210px;
-    height:85px;
+    width:188px;
+    height:88px;
+    margin: 2px;
     float:left;
 }
 #divAddItem input[type=button]{
@@ -110,14 +214,14 @@ body {
     margin:0;
     padding:0;
 }
-.inventoryEntryPage4TxtQtyL{
+/*.inventoryEntryPage4TxtQtyL{
     width:30%;
     float:left;
 }
 .inventoryEntryPage4KeyPadL{
     width:69%;
     float:right;
-}
+}*/
 .inventoryEntryPage4TxtQtyP{
     width:100%;
     clear:both;
