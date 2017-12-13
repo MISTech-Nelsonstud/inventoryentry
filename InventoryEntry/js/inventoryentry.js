@@ -110,6 +110,12 @@ INVE.utility = {
         envelope.appendChild(COMMON.getBasicElement("div", null, title, "inventoryEntryTextTitle"));
         envelope.appendChild(COMMON.getFieldObject("txt", id, "", required));
         return envelope;
+    },
+    getDDL: function (id, title, required) {
+        var envelope = COMMON.getBasicElement("div");
+        envelope.appendChild(COMMON.getBasicElement("div", null, title, "inventoryEntryTextTitle"));
+        //envelope.appendChild(COMMON.getDDL(id, null, null,);
+        return envelope;
     }
 };
 INVE.page1 = {
