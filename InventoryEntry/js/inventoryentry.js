@@ -146,8 +146,10 @@ INVE.page2 = {
         var txtObj = COMMON.getBasicElement("div", "divPage2Txt", INVE.utility.getTextBox("txtLoc", "Location Filter"));
         //location type
         var loctype = {};
+        var locComp = {};
         INVE.locations.forEach(function (row) {
             loctype[row[1]] = "";
+            locComp[row[2]] = "";
         });
         var li = [{ value: "", text: "Any" }];
         var keys = Object.keys(loctype);
@@ -156,6 +158,14 @@ INVE.page2 = {
         });
         txtObj.appendChild(COMMON.getBasicElement("div", null, "Location Description"));
         txtObj.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();" }));
+        keys = Object.keys(locComp);
+        li = [{ value: "", text: "Any" }];
+        keys.forEach(function (oneKey) {
+            if (oneKey === "") { oneKey = "[Blank]"; }
+            li.push({ value: oneKey, text: oneKey });
+        });
+        txtObj.appendChild(COMMON.getBasicElement("div", null, "Location Company"));
+        txtObj.appendChild(COMMON.getDDL("ddlLocComp", null, false, null, li, null, { onchange: "INVE.page2.filter();" }));
         var dispObj = document.getElementById(INVE.displayDivId);
         dispObj.appendChild(txtObj);
         dispObj.appendChild(COMMON.getBasicElement("div", "divPage2Div"));
@@ -179,16 +189,15 @@ INVE.page2 = {
         "use strict";
         var val = document.getElementById("txtLoc").value;
         var locType = COMMON.getDDLValue("ddlLocType");
-        var toDisp = [];
+        var locComp = COMMON.getDDLValue("ddlLocComp");
+        var iHTML = "";
         INVE.locations.forEach(function (item) {
             var exp = new RegExp(val.toUpperCase());
-            if (exp.test(item[0].toUpperCase()) && (locType === "" || item[1] === locType)) {
-                toDisp.push(item);
+            var comp = item[2];
+            if (comp === "") { comp = "[Blank]"; }
+            if (exp.test(item[0].toUpperCase()) && (locType === "" || item[1] === locType) && (locComp === ""||comp === locComp)) {
+                iHTML += "<button data-loc=\"" + item[0] + "\" onclick=\"INVE.page3.display(this.getAttribute('data-loc'));\"><div>" + item[0] + "</div><div style=\"font-size:0.6em;\">" + item[1] + "</div><div style=\"font-size:0.6em;\">Company: " + comp + "</div></button>";
             }
-        });
-        var iHTML = "";
-        toDisp.forEach(function(item){
-            iHTML += "<button data-loc=\"" + item[0] + "\" onclick=\"INVE.page3.display(this.getAttribute('data-loc'));\">" + item[0] + "<br /><span style=\"font-size:0.6em;\">" + item[1] + "</span></button>";
         });
         iHTML += "<div style=\"clear:both\"></div>";
         COMMON.clearParent("divPage2Div");
@@ -200,6 +209,7 @@ INVE.page3 = {
         "use strict";
         INVE.currentObj.location = selectedLocation;
         INVE.currentObj.item = "";
+        INVE.currentObj.lot = "";
         INVE.utility.clearDisplay();
         INVE.utility.title("Item");
         var infoObj = {
@@ -282,8 +292,10 @@ INVE.page3 = {
     }
 };
 INVE.page4 = {
+    initDisplay: false,
     display: function (itemNumber, lot, qty) {
         "use strict";
+        INVE.page4.initDisplay = true;
         INVE.currentObj.item = itemNumber;
         INVE.currentObj.lot = lot;
         var params = [INVE.currentObj.item, INVE.currentObj.site];
@@ -309,6 +321,7 @@ INVE.page4 = {
         var formIndex = FILLIN.createForm("divTxtQty", "", null, INVE.page4.displayActions, null, "100%");
         FILLIN.addTextBox(formIndex, "txtQty", INVE.currentObj.qty, "Quantity", true, "integer", null, null, true);
         FILLIN.addButton(formIndex, true, null, "Continue", false, true, false);
+        FILLIN.addButton(formIndex, false, null, "Select Different Item", true, false, true);
         FILLIN.displayForm(formIndex);
         var keyArea = COMMON.getBasicElement("div", "divKeyPad");
         var getKeyButton = function (keyNumber) {
@@ -338,7 +351,10 @@ INVE.page4 = {
     },
     displayActions: function (dialogResults) {
         "use strict";
-        if (!dialogResults) { return; }
+        if (!dialogResults) {
+            INVE.page3.display(INVE.currentObj.location);
+            return;
+        }
         INVE.currentObj.qty = document.getElementById("txtQty").value;
         var params = [
             INVE.username,
@@ -357,6 +373,7 @@ INVE.page4 = {
         "use strict";
         var txtQty = document.getElementById("txtQty");
         var val = txtQty.value;
+        if (INVE.page4.initDisplay) { val = ""; }
         if (typeof keyNumber === "string") {
             if (keyNumber === "backspace" && val.length > 1) {
                 val = val.substring(0, val.length - 1);
@@ -367,6 +384,7 @@ INVE.page4 = {
             val += String(keyNumber);
         }
         txtQty.value = val;
+        INVE.page4.initDisplay = false;
     },
     landscape: function () {
         "use strict";
