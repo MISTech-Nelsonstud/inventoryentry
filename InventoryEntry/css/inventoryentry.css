@@ -62,18 +62,19 @@ body {
 }
 
 #divCDbutReturn{
-    display: inline-block;
+    /*display: inline-block;*/
     
 }
 
 #divCDbutContinue{
-    display: inline-block;
-    margin-left:118px !important;
+    /*display: inline-block;
+    margin-left:118px !important;*/
+    float:right;
 }
 
-#divCDtxtQty, #divCDbutReturn, #divCDbutContinue{
+/*#divCDtxtQty, #divCDbutReturn, #divCDbutContinue{
     float: none !important
-}
+}*/
 
 
 
