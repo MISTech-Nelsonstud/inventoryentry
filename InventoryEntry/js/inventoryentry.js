@@ -167,8 +167,9 @@ INVE.page2 = {
         var div = COMMON.getBasicElement("div", null, null, null, null, { "style": "margin-left: 10px" });
         div.appendChild(COMMON.getBasicElement("div", null, "Description", null, null, { "style": "font-size: 1.5em" }));
         div.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();", "style": "display: block" }));
+        
         txtObj.appendChild(div);
-
+        
 
 
         keys = Object.keys(locComp);
@@ -177,6 +178,8 @@ INVE.page2 = {
             if (oneKey === "") { oneKey = "[Blank]"; }
             li.push({ value: oneKey, text: oneKey });
         });
+
+        
 
         div = COMMON.getBasicElement("div", null, null, null, null, { "style": "margin-left: 10px" });
         div.appendChild(COMMON.getBasicElement("div", null, "Company", null, null, { "style": "font-size: 1.5em" }));
@@ -189,6 +192,7 @@ INVE.page2 = {
         var dispObj = document.getElementById(INVE.displayDivId);
         dispObj.appendChild(txtObj);
         dispObj.appendChild(COMMON.getBasicElement("div", "divPage2Div"));
+        COMMON.setDDLvalue("ddlLocType", "Finished Goods");
         //document.getElementById("txtLoc").setAttribute("onkeyup", "INVE.page2.filter();");
         document.getElementById("txtLoc").focus();
         document.getElementById("txtLoc").onkeyup = function (e) {
@@ -342,9 +346,11 @@ INVE.page4 = {
         var divTxtQty = COMMON.getBasicElement("div", "divTxtQty");
         var dispObj = document.getElementById(INVE.displayDivId);
         dispObj.appendChild(divTxtQty);
-        var formIndex = FILLIN.createForm("divTxtQty", "", null, INVE.page4.displayActions, null, "100%");
-        FILLIN.addTextBox(formIndex, "txtQty", null, "Quantity", true, "integer", null, null, true);
-        FILLIN.addButton(formIndex, true, null, "Continue", false, true, false);
+        var formIndex = FILLIN.createForm("divTxtQty", "", null, null, null, "80%");
+        FILLIN.addTextBox(formIndex, "txtQty", null, "Quantity", true, "integer", null, null, true, null, null, null, "butContinue", { "style": "font-size: 1.6em; height:32px;" });
+        FILLIN.addFormButton(formIndex, "butReturn", "Return", null, "INVE.page3.display('" + INVE.currentObj.location + "');", true);
+        FILLIN.addFormButton(formIndex, "butContinue", "Continue", null, "INVE.page4.displayActions('" + formIndex + "');", true);
+        //FILLIN.addButton(formIndex, true, "butContinue", "Continue", false, true, false);
         FILLIN.displayForm(formIndex);
         document.getElementById("txtQty").setAttribute("type", "number");
         document.getElementById("txtQty").setAttribute("pattern", "[0-9]*");
@@ -379,9 +385,13 @@ INVE.page4 = {
         }, 100)
         INVE.utility.orientationCheck();
     },
-    displayActions: function (dialogResults) {
+    displayActions: function (formIndex) {
         "use strict";
-        if (!dialogResults) { return; }
+        if (!COMMON.validateForm("divTxtQty")) {
+            document.getElementById("divErrMess" + formIndex).textContent = "Invalid Quantity Entered";
+            return false;
+        }
+        //if (!dialogResults) { return; }
         INVE.currentObj.qty = document.getElementById("txtQty").value;
         var params = [
             INVE.username,

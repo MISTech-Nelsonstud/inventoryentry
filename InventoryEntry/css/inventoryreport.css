@@ -60,18 +60,18 @@
     text-shadow: none;
 }
 
-#butExcel{
+#butExcel, #butCsv{
     width:120px; 
     font-size: 15px;
     vertical-align: middle; 
     margin-left: 5px;
 }
 
-#butCsv{
-    width:120px; 
+#butUpdate{
+    width:145px; 
     font-size: 15px;
     vertical-align: middle; 
-    margin-left: 5px;
+    margin-left: 385px;
     display:inline-block;
 }
 

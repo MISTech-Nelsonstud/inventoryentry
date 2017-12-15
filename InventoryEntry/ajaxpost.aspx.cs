@@ -54,6 +54,9 @@ namespace InventoryEntry
                 case "gridexcel":
                     gridExcel();
                     return;
+                case "gridexcel2":
+                    gridExcel2();
+                    return;
                 case "query2":
                     runUnsecureQuery();
                     return;
@@ -415,6 +418,37 @@ namespace InventoryEntry
             int[] numbercolumns = (payload.ContainsKey("numbercolumns") ? (payload["numbercolumns"] as ArrayList).ToArray(typeof(int)) as int[] : null);
             createReport(columnname, data, title, fn, numbercolumns);
         }
+
+
+        private void gridExcel2()
+        {
+            string[] columnname = (payload.ContainsKey("columnnames") ? (payload["columnnames"] as ArrayList).ToArray(typeof(string)) as string[] : null);
+            var alData = (payload["data"] as ArrayList);
+            List<string[]> data = new List<string[]>(alData.Count);
+            foreach (ArrayList row in alData)
+            {
+                String[] strRow = (String[])row.ToArray(typeof(string));
+                data.Add(strRow);
+            }
+            string title = (payload.ContainsKey("title") ? payload["title"].ToString() : "Grid Export");
+            string fn = title + " " + DateTime.Now.ToString("Mdyyyyhhmmss") + ".xlsx";
+            HashSet<char> invalid = new HashSet<char>(System.IO.Path.GetInvalidFileNameChars());
+            char[] chrFN = fn.ToCharArray();
+
+            for (int i = 0; i < chrFN.Length; i++)
+            {
+                if (invalid.Contains(chrFN[i]))
+                {
+                    chrFN[i] = ' ';
+                }
+            }
+            fn = new string(chrFN);
+            int[] numbercolumns = (payload.ContainsKey("numbercolumns") ? (payload["numbercolumns"] as ArrayList).ToArray(typeof(int)) as int[] : null);
+            createReport2(columnname, data, title, fn, numbercolumns);
+        }
+
+
+
         private void createReport(string[] columnnames, List<string[]> data, string title, string filename, int[] numbercolumns)
         {
             var rpt = new OpenXMLExcel.OpenXMLExcel();
@@ -448,6 +482,9 @@ namespace InventoryEntry
             rpt.AddWorksheetData(wkid, reportData);
             rpt.AddCommonFontStyle(wkid, OpenXMLExcel.CommonFontStyles.Calibri16Bold, 0, 0, 1, 1);
             rpt.AddMergeCell(wkid, 0, 0, 1, 5);
+
+           // rpt.AddCommonNumberFormatStyle
+            
             if (numbercolumns != null && numbercolumns.Length > 0 && data.Count > 0)
             {
                 foreach (int col in numbercolumns)
@@ -460,6 +497,78 @@ namespace InventoryEntry
             Response.End();
 
         }
+
+
+        private void createReport2(string[] columnnames, List<string[]> data, string title, string filename, int[] numbercolumns)
+        {
+            var rpt = new OpenXMLExcel.OpenXMLExcel();
+            if (title == null) { title = ""; }
+            string tabtitle = title;
+            if (tabtitle.Length > 30) { tabtitle = tabtitle.Substring(0, 30); }
+            if (tabtitle == "") { tabtitle = "Sheet1"; }
+            var wkid = rpt.AddWorkSheet(tabtitle, true, true);
+            var reportData = new List<string[]>();
+            string[] s = { title, "", "", "", "", "printed: " + DateTime.Now.ToString("M/d/yyyy hh:mm") };
+            reportData.Add(s);
+            if (columnnames != null && columnnames.Length > 0)
+            {
+                reportData.Add(columnnames);
+                rpt.AddCommonFontStyle(wkid, OpenXMLExcel.CommonFontStyles.Calibri14Bold, 0, 1, 1, columnnames.Length);
+                rpt.AddCommonBorderStyle(wkid, OpenXMLExcel.CommonBorderStyles.Bottom_DoubleLine, 0, 1, 1, columnnames.Length);
+                rpt.AddCommonFillStyle(wkid, OpenXMLExcel.CommonFillStyles.LightSilver, 0, 1, 1, columnnames.Length);
+            }
+            if (data != null && data.Count > 0)
+            {
+                foreach (string[] row in data)
+                {
+                    reportData.Add(row);
+                }
+            }
+            else
+            {
+                string[] nodata = { "no data" };
+                reportData.Add(nodata);
+            }
+            rpt.AddWorksheetData(wkid, reportData);
+            rpt.AddCommonFontStyle(wkid, OpenXMLExcel.CommonFontStyles.Calibri16Bold, 0, 0, 1, 1);
+            rpt.AddMergeCell(wkid, 0, 0, 1, 5);
+
+            // rpt.AddCommonNumberFormatStyle
+
+            if (numbercolumns != null && numbercolumns.Length > 0 && data.Count > 0)
+            {
+                foreach (int col in numbercolumns)
+                {
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.financePercent, col, 1, 50, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, 0, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 1, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 2, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 3, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 4, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 5, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.financeNoComma, 6, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.financeNoComma, 7, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.financeNoComma, 8, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 9, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 10, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.standardDate, 11, 2, data.Count, 1);
+                    rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.textFormat, 12, 2, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 3, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 4, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 5, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 6, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 7, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 8, data.Count, 1);
+                    //rpt.AddCommonNumberFormatStyle(wkid, OpenXMLExcel.CommonNumberStyles.General, col, 9, data.Count, 1);
+                }
+            }
+            sendResponse();
+            rpt.HTTPDownload(filename, Response);
+            Response.End();
+
+        }
+
+
         #endregion
         #region "Custom Request"
         private void custom()
@@ -479,7 +588,7 @@ namespace InventoryEntry
             switch (command)
             {
                 case "adlogin":
-                    //check if user is valid app user from ad username
+                    resp.payload = Security.login();
                     break;
 
 

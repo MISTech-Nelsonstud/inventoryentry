@@ -56,7 +56,24 @@ body {
 }
 
 
+#butContinue, #butReturn{
+    width: 80px;
+    height: 38px;
+}
 
+#divCDbutReturn{
+    display: inline-block;
+    
+}
+
+#divCDbutContinue{
+    display: inline-block;
+    margin-left:118px !important;
+}
+
+#divCDtxtQty, #divCDbutReturn, #divCDbutContinue{
+    float: none !important
+}
 
 
 
