@@ -203,6 +203,10 @@ and (-webkit-min-device-pixel-ratio: 1) {
     width:74%;
     float:right;
 }*/
+#divAllLots button{
+    width:175px;
+    height: 50px;
+}
 .inventoryEntryPage3TopP{
     width:100%;
     clear:both;

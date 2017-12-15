@@ -11,6 +11,10 @@ INVE.pages = {
     page3: 3,
     page4: 4
 };
+INVE.userPreference = {
+    descriptionfilter: null,
+    companyfilter: null
+};
 INVE.currentpage = null;
 INVE.landscape = "landscape";
 INVE.portrait = "portrait";
@@ -112,14 +116,16 @@ INVE.utility = {
         envelope.appendChild(COMMON.getFieldObject("txt", id, "", required));
         envelope.appendChild(COMMON.getButton("btnSearch", "Search", "INVE.page2.filter();"));
         return envelope;
-    },
-    enterPress: function(){
-
     }
+    //},
+    //enterPress: function(){
+
+    //}
 };
 INVE.page1 = {
     display: function () {
         "use strict";
+        window.scrollTo(0, 0);
         if (INVE.username) {
             INVE.page2.display();
             return;
@@ -143,9 +149,10 @@ INVE.page1 = {
 INVE.page2 = {
     display: function (mess) {
         "use strict";
-        if (window.devicePixelRatio) {
-
-        }
+        window.scrollTo(0, 0);
+        //if (window.devicePixelRatio) {
+        //    //Cody what is this
+        //}
         INVE.utility.initCurrentObj();
         INVE.currentObj.site = "SD&L"; //***************This should populate from page1
         INVE.utility.clearDisplay();
@@ -166,7 +173,7 @@ INVE.page2 = {
         });
         var div = COMMON.getBasicElement("div", null, null, null, null, { "style": "margin-left: 10px" });
         div.appendChild(COMMON.getBasicElement("div", null, "Description", null, null, { "style": "font-size: 1.5em" }));
-        div.appendChild(COMMON.getDDL("ddlLocType", null, false, null, li, null, { onchange: "INVE.page2.filter();", "style": "display: block" }));
+        div.appendChild(COMMON.getDDL("ddlLocType", INVE.userPreference.descriptionfilter, false, null, li, null, { onchange: "INVE.page2.filter();", "style": "display: block" }));
         
         txtObj.appendChild(div);
         
@@ -183,7 +190,7 @@ INVE.page2 = {
 
         div = COMMON.getBasicElement("div", null, null, null, null, { "style": "margin-left: 10px" });
         div.appendChild(COMMON.getBasicElement("div", null, "Company", null, null, { "style": "font-size: 1.5em" }));
-        div.appendChild(COMMON.getDDL("ddlLocComp", null, false, null, li, null, { onchange: "INVE.page2.filter();", "style": "display: block" }));
+        div.appendChild(COMMON.getDDL("ddlLocComp", INVE.userPreference.companyfilter, false, null, li, null, { onchange: "INVE.page2.filter();", "style": "display: block" }));
         txtObj.appendChild(div);
 
 
@@ -196,11 +203,11 @@ INVE.page2 = {
         //document.getElementById("txtLoc").setAttribute("onkeyup", "INVE.page2.filter();");
         document.getElementById("txtLoc").focus();
         document.getElementById("txtLoc").onkeyup = function (e) {
-            if (e.keyCode == 13) {
+            if (e.keyCode === 13) {
                 INVE.page2.filter();
                 return false;
             }
-        }
+        };
         INVE.displayProperties.landscapedisplayfunction = INVE.page2.landscape;
         INVE.displayProperties.portraitdisplayfunction = INVE.page2.portrait;
         INVE.utility.orientationCheck();
@@ -219,14 +226,15 @@ INVE.page2 = {
     filter: function () {
         "use strict";
         var val = document.getElementById("txtLoc").value;
-        var locType = COMMON.getDDLValue("ddlLocType");
-        var locComp = COMMON.getDDLValue("ddlLocComp");
+        INVE.userPreference.descriptionfilter = COMMON.getDDLValue("ddlLocType");
+        INVE.userPreference.companyfilter = COMMON.getDDLValue("ddlLocComp");
+        
         var iHTML = "";
         INVE.locations.forEach(function (item) {
             var exp = new RegExp(val.toUpperCase());
             var comp = item[2];
             if (comp === "") { comp = "[Blank]"; }
-            if (exp.test(item[0].toUpperCase()) && (locType === "" || item[1] === locType) && (locComp === "" || comp === locComp)) {
+            if (exp.test(item[0].toUpperCase()) && (INVE.userPreference.descriptionfilter === "" || item[1] === INVE.userPreference.descriptionfilter) && (INVE.userPreference.companyfilter === "" || comp === INVE.userPreference.companyfilter)) {
                 iHTML += "<button data-loc=\"" + item[0] + "\" onclick=\"INVE.page3.display(this.getAttribute('data-loc'));\"><div style=\"font-size: 2.1em\">" + item[0] + "</div><div style=\"font-size:1.2em;\">" + item[1] + "</div><div style=\"font-size:1.2em;\">Company: " + comp + "</div></button>";
             }
         });
@@ -236,28 +244,31 @@ INVE.page2 = {
     }
 };
 INVE.page3 = {
-    display: function (selectedLocation) {
+    display: function (selectedLocation, mess) {
         "use strict";
+        window.scrollTo(0, 0);
         INVE.currentObj.location = selectedLocation;
         INVE.currentObj.item = "";
         INVE.utility.clearDisplay();
         INVE.utility.title("Item");
-        var infoObj = {
-            Location: selectedLocation,
-            Instructions: "Select the Item to inventory or click &quot;Add Part&quot; if the item is not listed"
-        };
+        var infoObj = {};
+        if (mess && mess !== "") {
+            infoObj.Message = "<span style=\"color:red;\">" + mess + "</span>";
+        }
+        infoObj.Location = selectedLocation;
+        infoObj.Instructions = "Select the Item to inventory or click &quot;Add Part&quot; if the item is not listed";
         INVE.utility.info(infoObj);
         var params = [selectedLocation, INVE.currentObj.site];
         var res = AJAXPOST.callQuery2("pr_WMS_GetAllItems", params);
         var dispObj = document.getElementById(INVE.displayDivId);
-        var topObj = COMMON.getBasicElement("div", "divAddItem", COMMON.getButton(null, "Add Item Not Listed", "INVE.page3.newItem();"));
+        var topObj = COMMON.getBasicElement("div", "divAddItem", COMMON.getButton(null, "Add Item Not Listed", "INVE.page3.newItem(0);"));
         topObj.appendChild(COMMON.getButton(null, "Return to \"Select Location\"", "INVE.page2.display();"));
         var buttons = COMMON.getBasicElement("div", "divItemButtons");
         var iHTML = "";
         if (res.payload.rows.length > 0) {
             res.payload.rows.forEach(function (row) {
                 var title = "<div><h3>" + row[0] + "</h3><div>Lot: " + row[1] + "</div><div>" + row[2] + "</div></div>";
-                iHTML += "<button data-item=\"" + row[0] + "\" data-lot=\"" + row[1] + "\" data-qty=\"" + row[3] + "\" onclick=\"INVE.page3.buttonclicked(this);\">" + title + "</button>";
+                iHTML += "<button data-item=\"" + row[0] + "\" data-lot=\"" + row[1] + "\" data-qty=\"" + row[3] + "\" onclick=\"INVE.page3.buttonclicked(this);\"" + (row[4] === "1" ? " style=\"background-color:#646F45;\"" : "") + ">" + title + "</button>";
             });
             iHTML += "<div style=\"clear:both\"></div>";
         }
@@ -285,7 +296,7 @@ INVE.page3 = {
         FILLIN.addButton(formindex, false, null, "Cancel", true, false, true);
         FILLIN.addButton(formindex, true, "butContinue", "Continue", false, true);
         FILLIN.displayForm(formindex);
-        if (error) {
+        if (String(error)==="1") {
             FILLIN.errorMessage(formindex, "This Item does not exist. Please check your entry and try again.");
         }
     },
@@ -294,22 +305,44 @@ INVE.page3 = {
         if (!dialogResults) { return; }
         INVE.page3.newItemGetLot(dataValues.txtItem.value);
     },
-    newItemGetLot: function (item) {
+    newItemLotList: null,
+    newItemGetLot: function (itemNumber) {
         "use strict";
-        var res = AJAXPOST.callQuery2("WMS_GetValidItemLx", [item]);
+        var res = AJAXPOST.callQuery2("WMS_GetValidItemLx", [itemNumber]);
         if (res.payload.rows[0][0] === "1") {
-            INVE.page3.newItem(true);
+            INVE.page3.newItem(res.payload.rows[0][0]);
             return;
         }
-        var formIndex = FILLIN.createDialog(INVE.divDialog, "Select Lot", "Select a Lot to continue", null, null, "800px");
-        var iHTML = "";
-        res.payload.rows.forEach(function (row) {
-            iHTML += "<button data-lot=\"" + row[1] + "\" onclick=\"INVE.page3.newItemLot('" + row[1] + "', '" + item + "', " + formIndex + ");\">" + row[1] + "</button>";
-        });
-        var buttons = COMMON.getBasicElement("div", "divAllLots", iHTML);
+        var instructions = "Click on the LOT number button to continue. Use the textbox to filter the list or enter a LOT not in the list. Click continue to add the LOT number that was entered.";
+        if (res.payload.rows[0][0] === "2") {
+            instructions = "Could not find any Lot Numbers for " + itemNumber + ". Enter a Lot Number and click Continue";
+        }
+        INVE.page3.newItemLotList = res.payload.rows;
+        var formIndex = FILLIN.createDialog(INVE.divDialog, "Select Lot for Item Number " + itemNumber, instructions, INVE.page3.newItemGetLotActions, itemNumber, "80%");
+              var buttons = COMMON.getBasicElement("div", "divAllLots");
+        FILLIN.addTextBox(formIndex, "txtLot", "", "Lot Number", true, null, null, null, true, "Filter Lots", null, null, "butContinueLot", { "onkeypress": "INVE.page3.newItemLotFilter(" + formIndex + ", '" + itemNumber + "');" });
         FILLIN.addGenericControl(formIndex, buttons, "", true);
-        FILLIN.addButton(formIndex, false, null, "Cancel", true);
+        FILLIN.addButton(formIndex, true, "butContinueLot", "Continue", false, true, false);
+        FILLIN.addButton(formIndex, false, null, "Cancel", true, false, false);
         FILLIN.displayForm(formIndex);
+        INVE.page3.newItemLotFilter(formIndex, itemNumber);
+
+    },
+    newItemGetLotActions: function(dialogResults, dataValues, itemNumber){
+        "use strict";
+        if (!dialogResults) { return; }
+        INVE.page4.display(itemNumber, dataValues.txtLot.value, 0);
+    },
+    newItemLotFilter: function(formIndex, itemNumber){
+        "use strict";
+        var exp = new RegExp(document.getElementById("txtLot").value.toUpperCase());
+        var iHTML = "";
+        INVE.page3.newItemLotList.forEach(function (row) {
+            if (row[1] !== "" && exp.test(row[1].toUpperCase())) {
+                iHTML += "<button data-lot=\"" + row[1] + "\" onclick=\"INVE.page3.newItemLot('" + row[1] + "', '" + itemNumber + "', " + String(formIndex) + ");\">" + row[1] + "</button>";
+            }
+        });
+        document.getElementById("divAllLots").innerHTML = iHTML;
     },
     newItemLot: function (Lot, ItemNumber, formIndex) {
         "use strict";
@@ -324,6 +357,7 @@ INVE.page3 = {
 INVE.page4 = {
     display: function (itemNumber, lot, qty) {
         "use strict";
+        window.scrollTo(0, 0);
         INVE.currentObj.item = itemNumber;
         INVE.currentObj.lot = lot;
         var params = [INVE.currentObj.item, INVE.currentObj.site];
@@ -337,6 +371,7 @@ INVE.page4 = {
         var infoObj = {
             Location: INVE.currentObj.location,
             Item_Number: INVE.currentObj.item,
+            Lot: INVE.currentObj.lot,
             Description: INVE.currentObj.itemdescription,
             Warehouse: INVE.currentObj.warehouse,
             Company: INVE.currentObj.company,
@@ -382,7 +417,7 @@ INVE.page4 = {
         //INVE.displayProperties.portraitdisplayfunction = INVE.page4.portrait;
         window.setTimeout(function () {
             document.getElementById("txtQty").focus();
-        }, 100)
+        }, 100);
         INVE.utility.orientationCheck();
     },
     displayActions: function (formIndex) {
@@ -404,7 +439,7 @@ INVE.page4 = {
             INVE.currentObj.site
         ];
         AJAXPOST.callQuery2("WMS_UpdatePhysicalInv", params, true);
-        INVE.page2.display("Data Saved");
+        INVE.page3.display(INVE.currentObj.location, "Data Saved");
     },
     displayKeyActions: function (keyNumber) {
         "use strict";
