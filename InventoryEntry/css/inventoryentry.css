@@ -9,7 +9,7 @@ body {
 }
 #divTitle{
     position:fixed;
-    height: 50px;
+    height: 45px;
     background-color: #222222;
     color: white;
     width:100%;
@@ -19,10 +19,17 @@ body {
 }
 #divBottom{
     position:absolute;
-    top:50px;
+    top:45px;
     width:100%;
     z-index:5;
 }
+#divpage1Div button{
+    width: 342px;
+    height: 77px;
+    overflow:hidden;
+    float:left;
+}
+
 .inventoryEntryLeftTitle{
     float:left;
     padding-left:2%;
@@ -36,16 +43,8 @@ body {
     border-bottom:2px solid #222222;
     margin-bottom:2px;
 }
-/*.inventoryEntryPage2TxtL{
-    float:left;
-    width:25%;
-    padding:0 4px 0 4px;
-}
-.inventoryEntryPage2DivL{
-    float:right;
-    width:74%;
-}*/
-.inventoryEntryPage2TxtP{
+
+.inventoryEntryPage1TxtP{
     clear:both;
     width:100%;
     padding:0 4px 0 4px;
@@ -55,22 +54,38 @@ body {
     /*text-align: center;*/
 }
 
-
-#butContinue, #butReturn{
-    width: 80px;
-    height: 38px;
+.fielderroron{
+    border: 1px solid red
 }
-
+.message0, .message1
+{
+    position:absolute;
+    z-index:100;
+}
+.message1
+{
+    padding: 0 7px;
+    background:white;
+    border-style:solid;
+    border-width:1px;
+    font-size:0.9em;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius:10px;
+    white-space: nowrap;
+}
 #divCDbutReturn{
-    /*display: inline-block;*/
-    
-}
-
-#divCDbutContinue{
     /*display: inline-block;
     margin-left:118px !important;*/
     float:right;
 }
+#butContinue, #butReturn, .dvCDBottomButtons button, .freebutton{
+    min-width: 80px;
+    height: 50px;
+    font-size:1.3em;
+}
+
+
 
 /*#divCDtxtQty, #divCDbutReturn, #divCDbutContinue{
     float: none !important
@@ -84,20 +99,39 @@ body {
 
 #btnSearch{
     position:absolute;
-    right: 0px;
     height: 38px;
     width: 80px;
     -webkit-appearance: none;
 }
-
-    #txtLoc{
-    font-size: 1.6em;
-    height: 32px;
-    }
-    #ddlLocType, #ddlLocComp{
+#butClearSearch{
+    height:33px;
+    width:85px;
+}
+#txtLoc{
+font-size: 1.6em;
+height: 32px;
+}
+#divDescFilter{
+    float:left;
+    margin-bottom:5px;
+}
+.locFilter{
+    float:left;
+}
+.locFilter button{
+    width:67px;
+    height:71px;
+    float:left;
+    overflow:hidden;
+}
+.clearFloat{
+    clear:both;
+}
+#ddlLocType, #ddlLocComp{
     font-size: 1.2em;
     height: 38px;
-    }
+    width:75px;
+}
 
 
 @media only screen 
@@ -157,30 +191,30 @@ and (-webkit-min-device-pixel-ratio: 1) {
 
 
 
-.inventoryEntryPage2TxtP div{
+.inventoryEntryPage1TxtP div{
     display: inline-block;
     vertical-align: top;
 }
 
-.inventoryEntryPage2DivP{
+.inventoryEntryPage1DivP{
     clear:both;
     width:100%;
     display: block;
     /*text-align: center;*/
 }
-
-.inventoryEntryPage2DivP button{
+.inventoryEntryRightTitle button{
+     width:120px;
+    height:45px;
+    font-size:1em;
+}
+.inventoryEntryPage1DivP button{
     width:188px;
     height:88px;
     margin: 2px;
     /*text-align: center;*/
 }
 
-/* #divPage2Div button{
-    width:100px;
-    height:38px;
-    float:left;
-} */
+
 .inventoryEntryInfoCell{
     border:1px solid #CCCCCC;
     margin:1px;
@@ -196,60 +230,73 @@ and (-webkit-min-device-pixel-ratio: 1) {
     padding:0 2px;
     font-weight:400;
 }
-/*.inventoryEntryPage3TopL{
-    width:25%;
-    float:left;
-}
-.inventoryEntryPage3ButtonsL{
-    width:74%;
-    float:right;
-}*/
+
 #divAllLots button{
     width:175px;
     height: 50px;
 }
-.inventoryEntryPage3TopP{
+.inventoryEntryPage2TopP{
     width:100%;
     clear:both;
 }
 
-.inventoryEntryPage3TopP input {
+.inventoryEntryPage2TopP input, .inventoryEntryPage2TopP button {
     background-color: #c6d7ec;
     width:210px !important;
 }
 
-.inventoryEntryPage3ButtonsP{
+.inventoryEntryPage2ButtonsP{
     width:100%;
     clear:both;
 }
-#divItemButtons button, #divAddItem input[type=button]{
-    width:188px;
-    height:88px;
-    margin: 2px;
+div.inventoryEntryPage2ItemAdded, button.inventoryEntryPage2ItemAdded{
     float:left;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding:0 2px;
+    margin: 0 2px;
+    font-size: 0.8em;
 }
-#divAddItem input[type=button]{
+.inventoryEntryPage2ItemAdded h3{
+    margin:0;
+    padding:0;
+}
+button.inventoryEntryPage2ItemAdded{
+    width:312px;
+}
+#divItemButtons button {
+    width:342px;
+    height:88px;
+    margin: 0;
+    float:left;
+    overflow:hidden;
+}
+#divAddItem input[type=button], #divAddItem button{
     font-weight:700;
     font-size:0.9em;
+    width:114px;
+    height:71px;
+    margin:0;
+    float:left;
+    overflow:hidden;
 }
 #divItemButtons button h3{
     margin:0;
     padding:0;
 }
-/*.inventoryEntryPage4TxtQtyL{
+/*.inventoryEntrypage3TxtQtyL{
     width:30%;
     float:left;
 }
-.inventoryEntryPage4KeyPadL{
+.inventoryEntrypage3KeyPadL{
     width:69%;
     float:right;
 }*/
-.inventoryEntryPage4TxtQtyP{
+.inventoryEntrypage3TxtQtyP{
     width:100%;
     clear:both;
     padding:0 10px;
 }
-.inventoryEntryPage4KeyPadP{
+.inventoryEntrypage3KeyPadP{
     width:100%;
     clear:both;
 }
@@ -269,4 +316,61 @@ and (-webkit-min-device-pixel-ratio: 1) {
 #divKeyPad td{
     padding:0;
     margin:0;
+}
+.inventoryEntryLargeButton{
+    width:150px;
+    height:150px;
+    font-size:18pt;
+}
+#divLocationSelect{
+    padding: 3px 0 0 3px;
+}
+.locselectenv{
+    float:left;
+    width:130px;
+    height:60px;
+    border:1px solid black;
+    border-radius: 3px;
+    margin:0 3px 3px 0;
+    cursor:pointer;
+}
+#butExcel, #butCsv{
+    font-size: 15px;
+    vertical-align: middle; 
+    margin-left: 5px;
+}
+
+#butUpdate{
+    width:145px; 
+    font-size: 15px;
+    vertical-align: middle; 
+    margin-left: 5px;
+}
+.divPagerMessage{
+    font-size: 15px;
+    font-weight:600;
+    float:left;
+    margin-right: 3px;
+}
+#divPagerPages button{
+    width:50px;
+    height:50px;
+}
+#divPagerSelector{
+    border:1px solid black;
+    margin-bottom:5px;
+}
+#divItemButtons{
+    clear:both;
+}
+/*Login*/
+#ddlJob, #ddlPrinters{
+    width: 330px;
+    font-size: 1.3em;
+    height:50px;
+}
+#txtName, #txtSearch, #txtItem, #txtLot{
+    width: 310px;
+    font-size:1.3em;
+    height:50px;
 }

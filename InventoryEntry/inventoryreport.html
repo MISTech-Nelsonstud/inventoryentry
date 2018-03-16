@@ -5,20 +5,30 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="googlebot" content="noindex" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <title>WMS Inventory Report</title>
+    <title>NFS Physical Inventory Manager</title>
     <meta charset="utf-8" />
     <link href="http://fasweblib/fillinform.css" rel="stylesheet" />
     <link href="http://fasweblib/displaygrid.css" rel="stylesheet" />
-    <link href="css/inventoryreport.css" rel="stylesheet" />
+    <link href="css/inventoryentry.css" rel="stylesheet" />
     <script src="http://fasweblib/ajaxpost.js"></script>
     <script src="http://fasweblib/common.js"></script>
     <script src="http://fasweblib/displaygrid.js"></script>
-    <script src="http://fasweblib/fillinform.js"></script>
+    <script src="http://fasweblib/fillinform.js?ver2"></script>
     <script src="js/inventoryreport.js"></script>
 </head>
-<body onload="INVREPORT.login();">
-    <div id="divHeader"></div>
-    <div id="divControls"></div>
-    <div id="divMain"></div>
+<body>
+    <div id="divTitle">
+        <div class="inventoryEntryLeftTitle" id="divTitleLeft">NFS Physical Inventory Manager</div>
+        <div class="inventoryEntryRightTitle" id="divTitleRight"></div>
+        <div class="inventoryEntryRightTitle" id="divTitleRightControls"><button style="width:300px;" onclick="INVREPORT.createNewJob.page1();">Create New Inventory Job</button></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div id="divBottom">
+        <div id="divDispMain"></div>
+    </div>
+    <div id="divDialog"></div>
+    <script>
+        INVREPORT.init();
+    </script>
 </body>
 </html>
