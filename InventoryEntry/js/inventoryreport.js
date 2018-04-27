@@ -1,5 +1,9 @@
 ﻿/*global AJAXPOST, FILLIN, HELPTOPICS, TIMEPICKER, CAL, window, URLTOPDF, ADMIN, COMMON, DISPLAYGRID, EMBED, CANVAS, CKEDITOR, CANV2, MAIN, CARDS, PFLOGOS*/
 /*jslint node:true, white:true, browser:true, this:true, maxlen: 1000000*/
+///<reference path="http://fasweblib/fillinform.js" />
+///<reference path="http://fasweblib/common.js" />
+///<refrence path="http://fasweblib/displaygrid.js" />
+
 var INVREPORT = {};
 INVREPORT.displayDivId = "divDispMain";
 INVREPORT.dialogDiv = "divDialog";
@@ -35,6 +39,8 @@ INVREPORT.init = function () {
         return;
     }
     INVREPORT.jobGrid();
+    //INVREPORT.reportData = AJAXPOST.callQuery2("WMS_PhysInv_GetReport", ["1A8D9B31-D449-4F2B-9387-25C002A85025", "0"]).payload;
+    //INVREPORT.createCsv();
 };
 INVREPORT.createNewJob = {
     currentJob: {
@@ -49,7 +55,8 @@ INVREPORT.createNewJob = {
         warehousename: "",
         username: "",
         jobid: "",
-        lxlocs: []
+        lxlocs: [],
+        editing: false
     },
     addJobProperties: function (formIndex, stepNumber) {
         "use strict";
@@ -135,13 +142,14 @@ INVREPORT.createNewJob = {
                     username: INVREPORT.currentUser,
                     jobid: jobId,
                     lxlocs: aLocs,
-                    company: row[5]
+                    company: row[5],
+                    editing: true
                 };
             }
         }
         var formIndex = FILLIN.createDialog(INVREPORT.dialogDiv, "Create New Inventory Job", "Is this Job for Test or Production?", INVREPORT.createNewJob.page1actions, null, "500px");
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "test", null, "Test", false, false, "inventoryEntryLargeButton"), "", true, null, { "margin-left": "90px" });
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "prod", null, "Production", false, false, "inventoryEntryLargeButton"), "");
+        FILLIN.addFreeButton(formIndex, "test", null, "Test", false, false, "inventoryEntryLargeButton");
+        FILLIN.addFreeButton(formIndex, "prod", null, "Production", false, false, "inventoryEntryLargeButton");
         FILLIN.addButton(formIndex, "cancel", null, "Cancel", true);
         FILLIN.displayForm(formIndex);
     },
@@ -163,6 +171,7 @@ INVREPORT.createNewJob = {
     },
     page2validation: function (dataValues, formIndex) {
         "use strict";
+        if (INVREPORT.createNewJob.currentJob.editing && INVREPORT.createNewJob.currentJob.name === dataValues.txtJobName.value) { return true; }
         var res = AJAXPOST.callQuery2("WMS_PhysInv_CheckJobName", [dataValues.txtJobName.value]);
         if (res.payload.rows[0][0] === "1") {
             FILLIN.errorMessage(formIndex, dataValues.txtJobName.value + " is already being used. Please enter a new Job name");
@@ -185,8 +194,8 @@ INVREPORT.createNewJob = {
         var formIndex = FILLIN.createDialog(INVREPORT.dialogDiv, "WMS Locations", null, INVREPORT.createNewJob.page3actions, null, "500px");
         INVREPORT.createNewJob.addJobProperties(formIndex, 2);
         FILLIN.addSpan(formIndex, null, "Will this job use locations found in WMS?", null, { "width": "90%" }, true);
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "yes", null, "Yes", false, false, "inventoryEntryLargeButton"), "", true, null, { "margin-left": "90px" });
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "no", null, "No", false, false, "inventoryEntryLargeButton"), "");
+        FILLIN.addFreeButton(formIndex, "yes", null, "Yes", false, false, "inventoryEntryLargeButton");
+        FILLIN.addFreeButton(formIndex, "no", null, "No", false, false, "inventoryEntryLargeButton");
         FILLIN.addButton(formIndex, "back", null, "Change Job Name", true);
         FILLIN.addButton(formIndex, "cancel", null, "Cancel");
         FILLIN.displayForm(formIndex);
@@ -295,8 +304,8 @@ INVREPORT.createNewJob = {
         var formIndex = FILLIN.createDialog(INVREPORT.dialogDiv, "LX Locations", "Some inventory locations do not exist in WMS or the site does not use WMS.  If you want to include Inventory locations that are in LX, please answer yes to this question and you will get an opportunity to add them.  Please note that if you selected WMS locations, you will not be able to select the same location in LX", INVREPORT.createNewJob.page6actions, null, "500px");
         INVREPORT.createNewJob.addJobProperties(formIndex, 5);
         FILLIN.addSpan(formIndex, null, "Will this job use locations found only in LX?", "", { "width": "90%" }, true);
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "yes", null, "Yes", false, false, "inventoryEntryLargeButton"), "", true, null, { "margin-left": "90px" });
-        FILLIN.addGenericControl(formIndex, FILLIN.addFreeButton(formIndex, "no", null, "No", false, false, "inventoryEntryLargeButton"), "");
+        FILLIN.addFreeButton(formIndex, "yes", null, "Yes", false, false, "inventoryEntryLargeButton");
+        FILLIN.addFreeButton(formIndex, "no", null, "No", false, false, "inventoryEntryLargeButton");
         FILLIN.addButton(formIndex, "back", null, "Change Warehouse", true);
         FILLIN.addButton(formIndex, "cancel", null, "Cancel");
         FILLIN.displayForm(formIndex);
@@ -638,12 +647,12 @@ INVREPORT.manageJobcontinue = function (jobid) {
         FILLIN.addButton(formIndex, "excel", null, "Create Excel", true);
     }
     if (jobrow[10] === "1" && jobrow[11] === "0" && INVREPORT.hasPermissions) {
-        FILLIN.addButton(formIndex, "adjust", null, "Update Inventory", true);
+        FILLIN.addButton(formIndex, "adjust", null, "Complete Inventory", true);
         FILLIN.addButton(formIndex, "csv", null, "Create CSV", true);
     }
     FILLIN.addButton(formIndex, "close", null, "Close");
     FILLIN.displayForm(formIndex);
-    if (jobrow[8] === "1") { return; }
+    //if (jobrow[8] === "1") { return; }
     INVREPORT.reportData = AJAXPOST.callQuery2("WMS_PhysInv_GetReport", [jobid, "0"]).payload;
     var gridIndex = DISPLAYGRID.addGrid(INVREPORT.displayDivId, "divInvReportGrid", null, null, 20, 3);
     DISPLAYGRID.addNumberFormating(gridIndex, 6, 0);
@@ -690,6 +699,9 @@ INVREPORT.manageJobactions = function (dialogResults) {
         case "delete":
             FILLIN.yesNoDialog(INVREPORT.dialogDiv, "Delete Job", "You are about to delete this job. This action cannot be undone.  Are you sure you want to delete this job?", "50%", INVREPORT.manageDeleteJob, jobid);
             return;
+        case "csv":
+            INVREPORT.createCsv();
+            return;
     }
 };
 INVREPORT.manageDeleteJob = function (dialogResult, JobId) {
@@ -699,86 +711,7 @@ INVREPORT.manageDeleteJob = function (dialogResult, JobId) {
     FILLIN.okDialog(INVREPORT.dialogDiv, "Deleted Job", "Successfully Deleted " + res.payload.rows[0][0]);
     INVREPORT.jobGrid();
 }
-//INVREPORT.initControls = function () {
-//    //var validUser = AJAXPOST.callQuery2("wms_GetUserPermissions");
-//    //var allLocations = AJAXPOST.callQuery2("WMS_GetAllLocations", [INVREPORT.site, (INVREPORT.isTest ? "1" : "0")]).payload;
-//    //var keys = Object.keys(allLocations.rows);
-//    //var ddl = [{ "text": "--select an option--", "value": "" }];
-//    //keys.forEach(function (item) {
-//    //    ddl.push({ "text": allLocations.rows[item], "value": allLocations.rows[item] });
-//    //});
 
-//    //var formIndex = FILLIN.createForm(INVREPORT.controlDivId, "Inventory Report", "Select a company below to display a report");
-//    //FILLIN.addFormButton(formIndex, "butNelson", "Nelson", null, "INVREPORT.initGrid('Nelson')", null, null, { "class": "butCompany" });
-//    //FILLIN.addFormButton(formIndex, "butSwa", "SWA", null, "INVREPORT.initGrid('SWA')", null, null, { "class": "butCompany" });
-//    //FILLIN.addFormButton(formIndex, "butFerry", "Ferry Cap", null, "INVREPORT.initGrid('Ferry Cap')", null, null, { "class": "butCompany" });
-//    //FILLIN.addFormButton(formIndex, "butSkn", "SKN", null, "INVREPORT.initGrid('SKN')", null, null, {"class" : "butCompany"});
-//    //FILLIN.displayForm(formIndex);
-//};
-//INVREPORT.reportData = null;
-//INVREPORT.initGrid = function (jobid, mess) {
-//    "use strict";
-//    var isComplete = true;
-//    COMMON.clearParent(INVREPORT.displayDivId);
-//    var params = [
-//       jobid
-//    ];
-//    var jobinfo = AJAXPOST.callQuery("WMS_PhysInv_GetJobInfo", params).payload;
-//    var jobname = jobinfo.rows[0][0];
-//    INVREPORT.reportData = AJAXPOST.callQuery2("WMS_PhysInv_GetReport", params).payload;
-
-//    var keys = Object.keys(INVREPORT.reportData.rows);
-//    keys.forEach(function (item) {
-//        if (INVREPORT.reportData.rows[item][13] === "No") {
-//            isComplete = false;
-//        }
-//    });
-//    if (COMMON.exists(mess)) {
-//        document.getElementById(INVREPORT.displayDivId).appendChild(COMMON.getBasicElement("div", null, "<strong style=\"color: red\">" + mess + "</strong>"));
-//    }
-//    var gridIndex = DISPLAYGRID.addGrid(INVREPORT.displayDivId, "divInvReportGrid", null, null, 20, 3);
-//    DISPLAYGRID.addNumberFormating(gridIndex, 6, 0);
-//    DISPLAYGRID.addNumberFormating(gridIndex, 7, 0);
-//    DISPLAYGRID.addNumberFormating(gridIndex, 8, 0);
-
-//    DISPLAYGRID.addColorDefinition(gridIndex, 2, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addColorDefinition(gridIndex, 3, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addColorDefinition(gridIndex, 4, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addColorDefinition(gridIndex, 5, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addColorDefinition(gridIndex, 6, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addColorDefinition(gridIndex, 13, 13, function (val) {
-//        return val === "No" ? "#ff9999" : "#80ff80";
-//    });
-//    DISPLAYGRID.addTitles(gridIndex, jobname + " Report <div class=\"reportbuttons\">" + 
-//        "<button id=\"butExcel\" onclick=\"INVREPORT.createExcel('" + jobid + "');\">Create Excel</button>" + 
-//        "<button id=\"butCsv\" onclick=\"INVREPORT.createCsv('" + jobid + "');\">Create CSV</button>" + 
-//        "<button id=\"butUpdate\" onclick=\"INVREPORT.updateConfirm('" + jobid + "');\">Update Inventory</button>" +
-//        "</div><div>" +
-//        (isComplete ? "<span style=\"color:green\">All inventory for " + jobname + " is complete</span>" : "<span style=\"color:red\">All inventory must be complete for " + jobname + " before you can create a report and update inventory</span>" +
-//        "</div>"));
-//    //DISPLAYGRID.ignoreFilterRow(gridIndex);
-//    DISPLAYGRID.useEnhanceFilterRow(gridIndex);
-//    DISPLAYGRID.alternateColors(gridIndex);
-//    DISPLAYGRID.display2(gridIndex, INVREPORT.reportData);
-//    if (isComplete && INVREPORT.hasPermissions) {
-//        document.getElementById("butCsv").disabled = false;
-//        document.getElementById("butUpdate").disabled = false;
-//    }
-//    else {
-//        document.getElementById("butCsv").disabled = true;
-//        document.getElementById("butUpdate").disabled = true;
-//    }
-//};
 
 INVREPORT.createExcel = function () {
     "use strict";
@@ -820,6 +753,9 @@ INVREPORT.createCsv = function () {
             case "Lot":
                 newcolumns.push("Lot/heat");
                 break;
+            case "UOM":
+                newcolumns.push("UOM");
+                break;
         }
 
     });
@@ -827,7 +763,10 @@ INVREPORT.createCsv = function () {
     csvColumns = newcolumns.join(",");
     var strRows = "";
     INVREPORT.reportData.rows.forEach(function (row) {
-        strRows += (strRows === "" ? "" : "\r\n") + row[0] + ",\"" + row[1].substring(0, 4) + "\",\"" + row[2] + "\",\"" + row[3] + "\",\"" + row[5] + "\"," + row[6] + ",\"" + row[9] + "\"\r\n";
+        //if (row[10] === "SKN") {
+        //    strRows += (strRows === "" ? "" : "\r\n") + row[0] + ",\"" + row[1].substring(0, 4) + "\",\"" + row[2] + "\",\"" + row[3] + "\",\"" + row[5] + "\"," + row[6] + ",\"" + row[9] + "\"\r\n";
+        //}
+        strRows += (strRows === "" ? "" : "\r\n") + row[0] + ",\"" + row[1].substring(0, 4) + "\",\"" + row[2] + "\",\"" + row[3] + "\",\"" + row[5] + "\"," + row[6] + ",\"" + row[9] + ",\"" + row[15] + "\"\r\n";
     });
     var csvString = (csvColumns + "\r\n") + strRows;
 
@@ -848,39 +787,43 @@ INVREPORT.createCsv = function () {
     }
 };
 
-INVREPORT.updateConfirm = function (company) {
+INVREPORT.updateConfirm = function (jobid) {
     "use strict";
-    FILLIN.yesNoDialog(INVREPORT.displayDivId, "You are about to overwrite current inventory. Do you wish to proceed?", "This action cannot be undone", null, INVREPORT.updateInventory, company);
+    FILLIN.yesNoDialog(INVREPORT.displayDivId, "You are about to overwrite current inventory. Do you wish to proceed?", "This action cannot be undone", null, INVREPORT.updateInventory, jobid);
 };
 
-INVREPORT.updateInventory = function (result, company) {
+INVREPORT.updateInventory = function (result, jobid) {
     "use strict";
     if (result) {
         var isComplete = true;
         var checkReport;
         var params = [
-            company,
-            INVREPORT.site,
-            (INVREPORT.isTest ? "1" : "0")
+            jobid
         ];
-        //double check and make sure all inventory is complete
-        checkReport = AJAXPOST.callQuery2("WMS_GetPhysInvReport", params).payload;
-        var keys = Object.keys(checkReport.rows);
-        keys.forEach(function (item) {
-            if (checkReport.rows[item][12] === "No") {
-                isComplete = false;
-            }
-        });
-        if (isComplete) {
-            //do the update
-            AJAXPOST.callQuery2("WMS_Update_PhysInvToCurrentInv", params, true);
-            FILLIN.okDialog(INVREPORT.displayDivId, "Success", "The inventory for " + company + " has been updated.");
-        }
-        else {
-            //exit operation
+        var res = AJAXPOST.callQuery2("WMS_PhysInv_Update_PhysInvToCurrentInv]", params)
+        if (res.payload.rows[0][0] === "1") {
             FILLIN.okDialog(INVREPORT.displayDivId, "Operation Aborted", "The inventory is not complete and could not be updated");
-
+        } else {
+            FILLIN.okDialog(INVREPORT.displayDivId, res.payload.rows[0][1], res.payload.rows[0][2]);
         }
+        //double check and make sure all inventory is complete
+        //checkReport = AJAXPOST.callQuery2("WMS_GetPhysInvReport", params).payload;
+        //var keys = Object.keys(checkReport.rows);
+        //keys.forEach(function (item) {
+        //    if (checkReport.rows[item][12] === "No") {
+        //        isComplete = false;
+        //    }
+        //});
+        //if (isComplete) {
+        //    //do the update
+        //    AJAXPOST.callQuery2("WMS_Update_PhysInvToCurrentInv", params, true);
+        //    FILLIN.okDialog(INVREPORT.displayDivId, "Success", "The inventory for " + company + " has been updated.");
+        //}
+        //else {
+        //    //exit operation
+        //    FILLIN.okDialog(INVREPORT.displayDivId, "Operation Aborted", "The inventory is not complete and could not be updated");
+
+        //}
     }
 };
 

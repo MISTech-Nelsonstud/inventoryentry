@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using System.IO;
 using CommonClasses;
 using dbConnector2017;
+using MongoDB.Bson;
 
 namespace InventoryEntry
 {
@@ -591,7 +592,9 @@ namespace InventoryEntry
                     resp.payload = Security.login();
                     break;
 
-
+                case "printtag":
+                    var t = BsonDocument.Parse(parameters[2]);
+                        break;
             }
 
             if (!download)

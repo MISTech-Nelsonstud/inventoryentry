@@ -5,6 +5,10 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="googlebot" content="noindex" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Cache-control" content="no-cache" />
+    <meta http-equiv="Cache-control" content="no-store" />
+    <meta http-equiv="expires" content="26 Jul 1997" />
+    <meta http-equiv="Prama" content="no-cache" />
     <title>WMS Inventory Entry</title>
 	<meta charset="utf-8" />
     <link href="http://fasweblib/fillinform.css" rel="stylesheet" />
@@ -15,6 +19,30 @@
     <script src="http://fasweblib/displaygrid.js"></script>
     <script src="http://fasweblib/fillinform.js"></script>
     <script src="js/inventoryentry.js"></script>
+    <script>
+        var tt = new Date();
+        tt = String(tt.getMinutes()) + String(tt.getSeconds());
+        var makeTail = function (elements, srcType) {
+            var keys = Object.keys(elements);
+            keys.forEach(function (key) {
+                var obj = allscrip[key];
+                var src = obj.getAttribute(srcType);
+                if (src && src !== "") {
+                    var pos = src.indexOf("?");
+                    if (pos >= 0) {
+                        src = src.substring(0, pos);
+                    }
+                }
+                src += "?ver" + tt;
+                obj.setAttribute(srcType, src);
+            });
+        };
+        var hd = document.getElementsByTagName("head")[0];
+        var allscrip = hd.getElementsByTagName("script");
+        makeTail(allscrip, "src");
+        allscrip = hd.getElementsByTagName("link");
+        makeTail(allscrip, "href");
+    </script>
 </head>
 <body>
     <div id="divTitle"></div>

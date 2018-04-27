@@ -14,7 +14,6 @@ body {
     color: white;
     width:100%;
     font-weight:700;
-    font-size:1.2em;
     z-index:10;
 }
 #divBottom{
@@ -28,6 +27,7 @@ body {
     height: 77px;
     overflow:hidden;
     float:left;
+    margin-bottom:8px;
 }
 
 .inventoryEntryLeftTitle{
@@ -36,7 +36,7 @@ body {
 }
 .inventoryEntryRightTitle{
     float:right;
-    padding-right:2%
+    padding-right:2px
 }
 #divData{
     font-weight:700;
@@ -262,6 +262,8 @@ div.inventoryEntryPage2ItemAdded, button.inventoryEntryPage2ItemAdded{
 }
 button.inventoryEntryPage2ItemAdded{
     width:312px;
+    height:90px;
+    overflow:hidden;
 }
 #divItemButtons button {
     width:342px;
@@ -373,4 +375,13 @@ button.inventoryEntryPage2ItemAdded{
     width: 310px;
     font-size:1.3em;
     height:50px;
+}
+.itemShortcut{
+    float:left !important;
+    width: auto !important;
+    min-width:50px !important;
+}
+.topbutton{
+    width:60px !important;
+    height:45px !important;
 }
